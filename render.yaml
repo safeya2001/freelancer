@@ -1,12 +1,12 @@
 databases:
-  - name: freelance-db
+  - name: dopawork-db
     plan: free
-    databaseName: freelance_db
-    user: freelance_user
+    databaseName: dopawork_db
+    user: dopawork_user
 
 services:
   - type: web
-    name: freelance-backend
+    name: dopawork-backend
     plan: free
     runtime: node
     rootDir: backend
@@ -20,7 +20,7 @@ services:
         value: "3001"
       - key: DATABASE_URL
         fromDatabase:
-          name: freelance-db
+          name: dopawork-db
           property: connectionString
       - key: JWT_SECRET
         generateValue: true
@@ -31,6 +31,8 @@ services:
       - key: JWT_REFRESH_EXPIRES_IN
         value: "7d"
       - key: FRONTEND_URL
+        value: https://lambent-bunny-1f68ea.netlify.app
+      - key: NETLIFY_URL
         value: https://lambent-bunny-1f68ea.netlify.app
       - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
         value: "true"

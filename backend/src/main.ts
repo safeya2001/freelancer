@@ -48,25 +48,34 @@ function validateEnv() {
       process.exit(1);
     }
 
-    // Validate DB password strength in production
-    const dbPassword = process.env['DB_PASSWORD'] ?? '';
-    const weakDbPatterns = ['secret', 'password', '12345', 'freelance', 'changeme'];
-    if (!dbPassword || weakDbPatterns.some((w) => dbPassword.toLowerCase().includes(w))) {
-      logger.error(
-        'DB_PASSWORD appears weak or uses a default value. ' +
-        'Set a strong random password before deploying to production.',
-      );
-      process.exit(1);
+    // Validate DB password strength in production (skip if DATABASE_URL is set — managed by hosting provider)
+    if (!process.env['DATABASE_URL']) {
+      const dbPassword = process.env['DB_PASSWORD'] ?? '';
+      const weakDbPatterns = ['secret', 'password', '12345', 'freelance', 'changeme'];
+      if (!dbPassword || weakDbPatterns.some((w) => dbPassword.toLowerCase().includes(w))) {
+        logger.error(
+          'DB_PASSWORD appears weak or uses a default value. ' +
+          'Set a strong random password before deploying to production.',
+        );
+        process.exit(1);
+      }
     }
 
-    // Validate Redis password strength in production
-    const redisPassword = process.env['REDIS_PASSWORD'] ?? '';
-    if (!redisPassword || weakDbPatterns.some((w) => redisPassword.toLowerCase().includes(w))) {
-      logger.error(
-        'REDIS_PASSWORD appears weak or uses a default value. ' +
-        'Set a strong random password before deploying to production.',
-      );
-      process.exit(1);
+    // Validate Redis password strength in production (skip if REDIS_URL is set or Redis is disabled)
+    if (process.env['REDIS_URL'] && !process.env['REDIS_PASSWORD']) {
+      // REDIS_URL includes password — OK
+    } else if (!process.env['REDIS_URL']) {
+      // Redis disabled — OK, CacheService handles gracefully
+    } else {
+      const redisPassword = process.env['REDIS_PASSWORD'] ?? '';
+      const weakDbPatterns = ['secret', 'password', '12345', 'freelance', 'changeme'];
+      if (weakDbPatterns.some((w) => redisPassword.toLowerCase().includes(w))) {
+        logger.error(
+          'REDIS_PASSWORD appears weak or uses a default value. ' +
+          'Set a strong random password before deploying to production.',
+        );
+        process.exit(1);
+      }
     }
   }
 }

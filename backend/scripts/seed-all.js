@@ -29,7 +29,7 @@ const postgres = require('postgres');
 // ── DB connection ────────────────────────────────────────────────────────────
 function connect() {
   if (process.env.DATABASE_URL) {
-    return postgres(process.env.DATABASE_URL, { ssl: false, max: 5 });
+    return postgres(process.env.DATABASE_URL, { ssl: { rejectUnauthorized: false }, max: 5 });
   }
   const { DB_HOST = 'postgres', DB_PORT = '5432', DB_USER, DB_PASSWORD, DB_NAME = 'freelance_db' } = process.env;
   return postgres({ host: DB_HOST, port: +DB_PORT, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, ssl: false, max: 5 });

@@ -25,21 +25,29 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const message =
       exception instanceof HttpException
         ? exception.getResponse()
-        : 'Internal server error';
+        : { message: 'Internal server error', message_ar: 'حدث خطأ في الخادم' };
 
     if (status >= 500) {
       this.logger.error(exception);
     }
+
+    const msgText =
+      typeof message === 'object' && (message as any).message
+        ? (message as any).message
+        : message;
+
+    const msgTextAr =
+      typeof message === 'object' && (message as any).message_ar
+        ? (message as any).message_ar
+        : (status >= 500 ? 'حدث خطأ في الخادم' : undefined);
 
     response.status(status).json({
       success: false,
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
-      message:
-        typeof message === 'object' && (message as any).message
-          ? (message as any).message
-          : message,
+      message: msgText,
+      ...(msgTextAr && { message_ar: msgTextAr }),
     });
   }
 }

@@ -45,8 +45,8 @@ export class PaymentsService {
     // Only CliQ is supported for manual deposits
     if (method === 'cliq') {
       return {
-        instructions_en: `Send ${amount.toFixed(3)} JOD via CliQ to the alias below, then upload your receipt. Reference: ${referenceNumber}`,
-        instructions_ar: `أرسل ${amount.toFixed(3)} د.أ عبر CliQ إلى المعرف أدناه، ثم ارفع إيصالك. المرجع: ${referenceNumber}`,
+        instructions_en: `Send ${amount.toFixed(2)} JOD via CliQ to the alias below, then upload your receipt. Reference: ${referenceNumber}`,
+        instructions_ar: `أرسل ${amount.toFixed(2)} د.أ عبر CliQ إلى المعرف أدناه، ثم ارفع إيصالك. المرجع: ${referenceNumber}`,
         details: {
           cliq_alias: this.config.get('CLIQ_ALIAS') || 'DOPAWORK.JO',
           account_name: this.config.get('CLIQ_NAME') || 'Dopa Work',
@@ -55,8 +55,8 @@ export class PaymentsService {
       };
     }
     return {
-      instructions_en: `Complete payment (${amount.toFixed(3)} JOD). Reference: ${referenceNumber}`,
-      instructions_ar: `أكمل الدفع (${amount.toFixed(3)} د.أ). المرجع: ${referenceNumber}`,
+      instructions_en: `Complete payment (${amount.toFixed(2)} JOD). Reference: ${referenceNumber}`,
+      instructions_ar: `أكمل الدفع (${amount.toFixed(2)} د.أ). المرجع: ${referenceNumber}`,
     };
   }
 

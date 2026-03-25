@@ -27,54 +27,11 @@ import {
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 import Layout from '@/components/layout/Layout';
-import { contentApi, gigsApi } from '@/services/api';
+import { gigsApi } from '@/services/api';
 import { formatJOD } from '@/utils/currency';
 import clsx from 'clsx';
 
 // ─── Constants ─────────────────────────────────────────────────────────────
-
-const PLATFORM_STATS = [
-  { numEn: '2,400+', numAr: '+٢٤٠٠', labelEn: 'Freelancers', labelAr: 'مستقل محترف' },
-  { numEn: '8,100+', numAr: '+٨١٠٠', labelEn: 'Projects Done', labelAr: 'مشروع منجز' },
-  { numEn: '4.9',    numAr: '٤.٩',   labelEn: 'Avg. Rating',   labelAr: 'متوسط التقييم', suffix: '⭐' },
-  { numEn: '98%',    numAr: '٩٨٪',   labelEn: 'Satisfaction',  labelAr: 'نسبة الرضا' },
-];
-
-const TESTIMONIALS = [
-  {
-    nameEn: 'Ahmad Al-Zoubi',
-    nameAr: 'أحمد الزعبي',
-    roleEn: 'Startup Founder · Amman',
-    roleAr: 'مؤسس شركة ناشئة · عمّان',
-    quoteEn: "Dopa Work connected me with a brilliant developer in 2 days. The escrow system made me feel completely safe. I've used it 4 times already.",
-    quoteAr: 'وصلني دوبا ووك بمطوّر رائع خلال يومين. نظام الضمان أشعرني بأمان تام. استخدمته ٤ مرات حتى الآن.',
-    initials: 'أح',
-    color: 'bg-blue-600',
-    stars: 5,
-  },
-  {
-    nameEn: 'Rania Khalil',
-    nameAr: 'رانيا خليل',
-    roleEn: 'Freelance Graphic Designer · Zarqa',
-    roleAr: 'مصممة جرافيك حرة · الزرقاء',
-    quoteEn: "Before Dopa Work I was chasing clients on WhatsApp. Now orders come to me, payments are protected, and I earn twice as much.",
-    quoteAr: 'قبل دوبا ووك كنت أطارد العملاء على واتساب. الآن الطلبات تأتيني، المدفوعات محمية، وأكسب ضعف ما كنت أكسب.',
-    initials: 'رخ',
-    color: 'bg-rose-500',
-    stars: 5,
-  },
-  {
-    nameEn: 'Khaled Mansour',
-    nameAr: 'خالد منصور',
-    roleEn: 'Marketing Manager · Irbid',
-    roleAr: 'مدير تسويق · إربد',
-    quoteEn: "I hired a translator and a content writer in the same week. Both delivered on time. This platform understands the Jordanian market.",
-    quoteAr: 'وظّفت مترجماً وكاتب محتوى في نفس الأسبوع. كلاهما سلّم في الوقت. المنصة تفهم السوق الأردني.',
-    initials: 'خم',
-    color: 'bg-emerald-600',
-    stars: 5,
-  },
-];
 
 const CATEGORIES = [
   { slug: 'web-development',  Icon: CodeBracketIcon,       en: 'Web Development',   ar: 'تطوير الويب',           gradient: 'from-blue-500 to-indigo-600',   light: 'bg-blue-50 text-blue-600'   },
@@ -188,14 +145,11 @@ function GigCard({ gig, isAr, apiBase }: { gig: Gig; isAr: boolean; apiBase: str
 
 // ─── Main Component ────────────────────────────────────────────────────────
 
-type Banner = { id: string; title_en?: string; title_ar?: string; image_url: string; link_url?: string };
-
 export default function HomePage() {
   const { t } = useTranslation('common');
   const { locale, push } = useRouter();
   const isAr = locale === 'ar';
   const [search, setSearch] = useState('');
-  const [banners, setBanners] = useState<Banner[]>([]);
   const [featuredGigs, setFeaturedGigs] = useState<Gig[]>([]);
   const [gigsLoading, setGigsLoading] = useState(true);
 
@@ -204,10 +158,6 @@ export default function HomePage() {
   // Stats animation
 
   useEffect(() => {
-    contentApi.getBanners()
-      .then((res) => setBanners(Array.isArray(res.data?.data) ? res.data.data : Array.isArray(res.data) ? res.data : []))
-      .catch(() => setBanners([]));
-
     gigsApi.list({ limit: 6, page: 1 })
       .then((res) => {
         const data = res.data?.data ?? res.data;
@@ -232,31 +182,6 @@ export default function HomePage() {
       titleAr="دوبا ووك — سوق العمل الحر الأردني"
       fullWidth
     >
-
-      {/* ── BANNERS ─────────────────────────────────────────────────────── */}
-      {banners.length > 0 && (
-        <div className="section-container py-4">
-          <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
-            {banners.map((b) => {
-              const title = isAr ? (b.title_ar || b.title_en) : (b.title_en || b.title_ar);
-              const imgSrc = b.image_url.startsWith('http') ? b.image_url : `${apiBase}${b.image_url}`;
-              const inner = (
-                <div className="relative min-w-[280px] sm:min-w-[460px] h-44 flex-shrink-0 snap-start rounded-2xl overflow-hidden bg-gray-200 shadow-sm">
-                  <img src={imgSrc} alt={title || 'Banner'} className="w-full h-full object-cover" />
-                  {title && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                      <span className="text-white font-semibold text-lg drop-shadow">{title}</span>
-                    </div>
-                  )}
-                </div>
-              );
-              return b.link_url
-                ? <a key={b.id} href={b.link_url} target="_blank" rel="noopener noreferrer">{inner}</a>
-                : <div key={b.id}>{inner}</div>;
-            })}
-          </div>
-        </div>
-      )}
 
       {/* ═══════════════════════════════════════════════════════════════════
           1. HERO
@@ -342,47 +267,45 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-primary-900/60 via-transparent to-transparent" />
               </div>
 
-              {/* Floating: active freelancers */}
+              {/* Trust indicators */}
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
                 className="absolute -top-4 -start-6 bg-white rounded-2xl px-4 py-3 shadow-xl flex items-center gap-3"
               >
-                <div className="flex -space-x-2 rtl:space-x-reverse">
-                  {['bg-blue-500','bg-rose-500','bg-emerald-500'].map((c,i) => (
-                    <div key={i} className={`w-7 h-7 rounded-full ${c} border-2 border-white flex items-center justify-center text-white text-[10px] font-bold`}>
-                      {['أ','ر','خ'][i]}
-                    </div>
-                  ))}
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+                  <ShieldCheckIcon className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-xs font-black text-gray-900">{isAr ? '+٢٤٠٠ مستقل' : '2,400+ Freelancers'}</p>
-                  <p className="text-[10px] text-green-500 font-semibold">{isAr ? '● متاحون الآن' : '● Online now'}</p>
+                  <p className="text-xs font-black text-gray-900">{isAr ? 'مستقلون موثقون' : 'Verified Freelancers'}</p>
+                  <p className="text-[10px] text-green-500 font-semibold">{isAr ? '● ابدأ الآن' : '● Get started'}</p>
                 </div>
               </motion.div>
 
-              {/* Floating: last order */}
+              {/* Floating: escrow badge */}
               <motion.div
                 animate={{ y: [0, 6, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut', delay: 1 }}
                 className="absolute -bottom-4 -end-4 bg-white rounded-2xl px-4 py-3 shadow-xl max-w-[200px]"
               >
-                <p className="text-[10px] text-gray-400 mb-1">{isAr ? 'آخر طلب' : 'Latest order'}</p>
-                <p className="text-xs font-bold text-gray-900">{isAr ? 'تصميم شعار احترافي' : 'Professional Logo Design'}</p>
-                <p className="text-xs text-primary-700 font-black mt-1">25.000 JOD ✓</p>
+                <div className="flex items-center gap-2">
+                  <LockClosedIcon className="w-5 h-5 text-primary-600" />
+                  <div>
+                    <p className="text-xs font-bold text-gray-900">{isAr ? 'دفع بالضمان' : 'Escrow Protection'}</p>
+                    <p className="text-[10px] text-gray-500">{isAr ? 'أموالك محمية' : 'Your funds are safe'}</p>
+                  </div>
+                </div>
               </motion.div>
 
-              {/* Floating: rating */}
+              {/* Floating: JOD badge */}
               <motion.div
                 animate={{ y: [0, -5, 0] }}
                 transition={{ repeat: Infinity, duration: 4.5, ease: 'easeInOut', delay: 0.5 }}
                 className="absolute top-1/2 -end-6 -translate-y-1/2 bg-white rounded-2xl px-4 py-3 shadow-xl text-center"
               >
-                <p className="text-2xl font-black text-amber-500">4.9</p>
-                <div className="flex gap-0.5 justify-center my-1">
-                  {[1,2,3,4,5].map(i => <StarSolid key={i} className="w-3 h-3 text-amber-400" />)}
-                </div>
-                <p className="text-[10px] text-gray-500">{isAr ? 'متوسط التقييم' : 'Avg. Rating'}</p>
+                <p className="text-2xl font-black text-primary-700">🇯🇴</p>
+                <p className="text-xs font-bold text-gray-900 mt-1">{isAr ? 'بالدينار' : 'JOD'}</p>
+                <p className="text-[10px] text-gray-500">{isAr ? 'السوق الأردني' : 'Jordan Market'}</p>
               </motion.div>
             </motion.div>
 
@@ -408,28 +331,6 @@ export default function HomePage() {
         </div>
       </section>
 
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          2. STATS STRIP
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section className="bg-white border-b border-gray-100">
-        <div className="section-container py-10">
-          <motion.div
-            initial="hidden" whileInView="show" viewport={{ once: true }}
-            variants={stagger}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 divide-y-2 md:divide-y-0 md:divide-x md:divide-x-reverse divide-gray-100"
-          >
-            {PLATFORM_STATS.map((s) => (
-              <motion.div key={s.labelEn} variants={fadeUp} className="text-center md:px-8 py-4 md:py-0">
-                <p className="text-3xl font-black text-primary-800 mb-1 tracking-tight">
-                  {isAr ? s.numAr : s.numEn}{s.suffix && <span className="text-xl ms-1">{s.suffix}</span>}
-                </p>
-                <p className="text-sm text-gray-500 font-medium">{isAr ? s.labelAr : s.labelEn}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
           3. CATEGORIES
@@ -564,63 +465,6 @@ export default function HomePage() {
                 </Link>
               </div>
             )}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          5b. TESTIMONIALS
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section className="bg-white py-20">
-        <div className="section-container">
-          <motion.div
-            initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}
-            variants={stagger}
-          >
-            <motion.div variants={fadeUp} className="text-center mb-12">
-              <span className="inline-block text-xs font-bold tracking-widest text-primary-600 uppercase mb-3">
-                {isAr ? 'آراء عملائنا' : 'What our users say'}
-              </span>
-              <h2 className="text-3xl font-black text-gray-900 mb-2">
-                {isAr ? 'يثق بنا آلاف الأردنيين' : 'Trusted by thousands across Jordan'}
-              </h2>
-              <p className="text-gray-500">
-                {isAr ? 'تجارب حقيقية من مستقلين وأصحاب عمل' : 'Real experiences from freelancers and clients'}
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {TESTIMONIALS.map((t) => (
-                <motion.div
-                  key={t.nameEn}
-                  variants={fadeUp}
-                  className="bg-gray-50 rounded-2xl p-6 flex flex-col gap-4 hover:shadow-md transition-shadow"
-                >
-                  {/* Stars */}
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: t.stars }).map((_, i) => (
-                      <StarSolid key={i} className="w-4 h-4 text-amber-400" />
-                    ))}
-                  </div>
-
-                  {/* Quote */}
-                  <p className="text-gray-700 text-sm leading-relaxed flex-1">
-                    &ldquo;{isAr ? t.quoteAr : t.quoteEn}&rdquo;
-                  </p>
-
-                  {/* Author */}
-                  <div className="flex items-center gap-3 border-t border-gray-100 pt-4">
-                    <div className={`w-10 h-10 rounded-full ${t.color} flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
-                      {t.initials}
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-900">{isAr ? t.nameAr : t.nameEn}</p>
-                      <p className="text-xs text-gray-400">{isAr ? t.roleAr : t.roleEn}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
         </div>
       </section>

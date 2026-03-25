@@ -57,7 +57,14 @@ export default function GigsPage() {
     setLoading(true);
     setError(false);
     try {
-      const res = await gigsApi.list({ ...filters, limit: 12 });
+      // Sanitize filters: strip empty strings to avoid sending NaN to backend
+      const sanitized: any = { ...filters, limit: 12 };
+      if (!sanitized.min_price || sanitized.min_price === '') delete sanitized.min_price;
+      if (!sanitized.max_price || sanitized.max_price === '') delete sanitized.max_price;
+      if (!sanitized.min_rating || sanitized.min_rating === '') delete sanitized.min_rating;
+      if (!sanitized.category_id || sanitized.category_id === '') delete sanitized.category_id;
+      if (!sanitized.search || sanitized.search === '') delete sanitized.search;
+      const res = await gigsApi.list(sanitized);
       const d = res.data?.data ?? res.data;
       setGigs(Array.isArray(d) ? d : d?.data ?? d?.gigs ?? []);
       setTotal(d?.total ?? d?.count ?? 0);

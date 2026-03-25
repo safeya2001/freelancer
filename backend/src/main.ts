@@ -100,7 +100,9 @@ async function bootstrap() {
     'http://localhost:3002',
     'http://localhost',
     ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
-  ];
+    // Netlify preview & production domains
+    ...(process.env.NETLIFY_URL ? [process.env.NETLIFY_URL] : []),
+  ].filter(Boolean);
   app.enableCors({
     origin: allowedOrigins,
     credentials: true,

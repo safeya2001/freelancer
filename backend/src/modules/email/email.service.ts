@@ -14,7 +14,7 @@ export class EmailService {
     const host = this.config.get<string>('SMTP_HOST');
     const user = this.config.get<string>('SMTP_USER');
     const pass = this.config.get<string>('SMTP_PASS');
-    this.fromAddress = this.config.get<string>('SMTP_FROM', 'noreply@freelance.jo');
+    this.fromAddress = this.config.get<string>('SMTP_FROM', 'noreply@dopawork.jo');
     this.isDev = this.config.get<string>('NODE_ENV', 'development') !== 'production';
 
     const isPlaceholder = (v?: string) => !v || v === 'placeholder' || v.includes('placeholder');
@@ -111,7 +111,7 @@ export class EmailService {
     await this.send(
       email,
       subject,
-      `<h2>${subject}</h2><div>${bodyHtml}</div><p style="color:#666;font-size:12px;">— Freelance.JO Platform</p>`,
+      `<h2>${subject}</h2><div>${bodyHtml}</div><p style="color:#666;font-size:12px;">— Dopa Work Platform</p>`,
     );
   }
 

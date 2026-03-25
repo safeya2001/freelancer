@@ -17,7 +17,7 @@ interface Props {
 export default function Layout({ children, title, titleAr, description, descriptionAr, noFooter, fullWidth }: Props) {
   const { locale } = useRouter();
   const isAr = locale === 'ar';
-  const pageTitle = (isAr ? titleAr : title) || 'Freelance.JO';
+  const pageTitle = (isAr ? titleAr : title) || 'Dopa Work';
   const pageDesc =
     (isAr ? descriptionAr : description) ||
     (isAr
@@ -35,7 +35,7 @@ export default function Layout({ children, title, titleAr, description, descript
     <>
       <NextSeo
         title={pageTitle}
-        titleTemplate="%s | Freelance.JO"
+        titleTemplate="%s | Dopa Work"
         description={pageDesc}
         canonical={`${baseUrl}${asPath}`}
         languageAlternates={languageAlternates}
@@ -49,12 +49,12 @@ export default function Layout({ children, title, titleAr, description, descript
           locale: isAr ? 'ar_JO' : 'en_JO',
           url: `${baseUrl}${asPath}`,
           type: 'website',
-          siteName: 'Freelance.JO',
-          images: [{ url: `${baseUrl}/og-image.png`, width: 1200, height: 630, alt: 'Freelance.JO' }],
+          siteName: 'Dopa Work',
+          images: [{ url: `${baseUrl}/og-image.png`, width: 1200, height: 630, alt: 'Dopa Work' }],
         }}
         twitter={{
-          handle: '@FreelanceJO',
-          site: '@FreelanceJO',
+          handle: '@DopaWorkJO',
+          site: '@DopaWorkJO',
           cardType: 'summary_large_image',
         }}
       />

@@ -44,8 +44,8 @@ services:
     plan: free
     runtime: node
     rootDir: frontend
-    buildCommand: npm ci && npm run build
-    startCommand: npm run start
+    buildCommand: npm ci && npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
+    startCommand: node .next/standalone/server.js
     healthCheckPath: /
     envVars:
       - key: NODE_ENV

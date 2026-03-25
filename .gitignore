@@ -1,0 +1,85 @@
+# =============================================================
+# Dopa Work — .gitignore
+# =============================================================
+
+# ── Environment / Secrets ────────────────────────────────────
+# NEVER commit real .env files; only .env.example is allowed.
+.env
+.env.local
+.env.production
+.env.staging
+.env.test
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+
+# ── Node / npm ───────────────────────────────────────────────
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm
+.pnpm-store/
+
+# ── Build outputs ────────────────────────────────────────────
+dist/
+build/
+backend/dist/
+frontend/.next/
+frontend/out/
+coverage/
+backend/coverage/
+
+# ── SSL Certificates (generated locally, never commit) ───────
+nginx/certs/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# ── Uploads / Media ──────────────────────────────────────────
+uploads/
+backend/uploads/
+
+# ── Database / Backups ───────────────────────────────────────
+*.sql.gz
+backups/
+*.dump
+
+# ── Logs ─────────────────────────────────────────────────────
+logs/
+*.log
+backend/logs/
+
+# ── Docker volumes (local dev) ───────────────────────────────
+.docker/
+docker-compose.override.yml
+
+# ── Editor / OS ──────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# ── Testing ──────────────────────────────────────────────────
+/test-results/
+/playwright-report/
+/playwright/.cache/
+frontend/test-results/
+frontend/playwright-report/
+
+# ── TypeScript ───────────────────────────────────────────────
+*.tsbuildinfo

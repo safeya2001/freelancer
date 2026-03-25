@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #2D6A4F;
+  --primary-light: #52B788;
+  --primary-bg: #D8F3DC;
+  --danger: #E63946;
+  --font-ar: 'Noto Sans Arabic', sans-serif;
+  --font-en: 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html[lang="ar"] body {
+  font-family: var(--font-ar);
+  direction: rtl;
+}
+
+html[lang="en"] body {
+  font-family: var(--font-en);
+  direction: ltr;
+}
+
+body {
+  background-color: #f9fafb;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+/* ── RTL/LTR utilities ── */
+.rtl { direction: rtl; }
+.ltr { direction: ltr; }
+
+/* ── Chat bubbles ── */
+.bubble-self { @apply bg-primary-600 text-white rounded-2xl rounded-br-sm; }
+.bubble-other { @apply bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-bl-sm; }
+
+/* ── Badge ── */
+.badge { @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium; }
+.badge-green { @apply badge bg-primary-100 text-primary-800; }
+.badge-red { @apply badge bg-red-100 text-red-800; }
+.badge-yellow { @apply badge bg-yellow-100 text-yellow-800; }
+.badge-blue { @apply badge bg-blue-100 text-blue-800; }
+.badge-gray { @apply badge bg-gray-100 text-gray-700; }
+
+/* ── Card ── */
+.card { @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6; }
+.card-hover { @apply card hover:shadow-md transition-shadow duration-200; }
+
+/* ── Input ── */
+.input { @apply w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition bg-white text-sm; }
+.input-error { @apply input border-red-400 focus:ring-red-400; }
+
+/* ── Button ── */
+.btn { @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed; }
+.btn-primary { @apply btn bg-primary-700 hover:bg-primary-800 text-white focus:ring-primary-500; }
+.btn-secondary { @apply btn bg-primary-100 hover:bg-primary-200 text-primary-800 focus:ring-primary-400; }
+.btn-danger { @apply btn bg-red-600 hover:bg-red-700 text-white focus:ring-red-400; }
+.btn-outline { @apply btn border-2 border-primary-600 text-primary-700 hover:bg-primary-50 focus:ring-primary-400; }
+.btn-ghost { @apply btn text-gray-600 hover:bg-gray-100 focus:ring-gray-300; }
+.btn-sm { @apply px-3 py-1.5 text-xs rounded-lg; }
+.btn-lg { @apply px-7 py-3.5 text-base rounded-2xl; }
+
+/* ── Page title ── */
+.page-title { @apply text-2xl font-bold text-gray-900 mb-6; }
+.section-title { @apply text-lg font-semibold text-gray-800 mb-4; }
+
+/* ── Gradient text ── */
+.text-gradient {
+  background: linear-gradient(135deg, #52B788, #B7E4C7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Skeleton loader ── */
+.skeleton {
+  @apply animate-pulse bg-gray-200 rounded-lg;
+}
+
+/* ── Gig card ── */
+.gig-card {
+  @apply bg-white rounded-2xl border border-gray-100 overflow-hidden
+         hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300;
+}
+
+/* ── Category card ── */
+.cat-card {
+  @apply flex flex-col items-center gap-3 py-6 px-4 rounded-2xl bg-white border border-gray-100
+         hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-pointer;
+}
+
+/* ── Trust pill ── */
+.trust-pill {
+  @apply flex items-center gap-2 px-4 py-2 rounded-full bg-white/10
+         backdrop-blur-sm border border-white/20 text-white text-sm font-medium;
+}
+
+/* ── Section container ── */
+.section-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}

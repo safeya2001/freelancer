@@ -5,6 +5,7 @@ databases:
     user: dopawork_user
 
 services:
+  # ── Backend API ──────────────────────────────────────
   - type: web
     name: dopawork-backend
     plan: free
@@ -31,8 +32,25 @@ services:
       - key: JWT_REFRESH_EXPIRES_IN
         value: "7d"
       - key: FRONTEND_URL
-        value: https://lambent-bunny-1f68ea.netlify.app
+        sync: false
       - key: NETLIFY_URL
-        value: https://lambent-bunny-1f68ea.netlify.app
+        sync: false
       - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
         value: "true"
+
+  # ── Frontend (Next.js) ──────────────────────────────
+  - type: web
+    name: dopawork-frontend
+    plan: free
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
